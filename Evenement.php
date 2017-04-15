@@ -69,27 +69,12 @@
                 <img class="img-responsive" src="images/watch.png" alt="">
             </div>
             <div class="col-md-4 col-md-offset-2 col-sm-5">
-                <h2>Notre prochain évènement dans : </h2>
+                <h2>Notre prochain évènement : </h2>
             </div>
+            <?php $event = $db->getLatestEvent();?>
             <div class="col-sm-7 col-md-6">
-                <ul id="countdown">
-                    <li>
-                        <span class="days time-font">00</span>
-                        <p>days </p>
-                    </li>
-                    <li>
-                        <span class="hours time-font">00</span>
-                        <p class="">hours </p>
-                    </li>
-                    <li>
-                        <span class="minutes time-font">00</span>
-                        <p class="">minutes</p>
-                    </li>
-                    <li>
-                        <span class="seconds time-font">00</span>
-                        <p class="">seconds</p>
-                    </li>
-                </ul>
+                <h3><?php echo $event->dateDebut ?></h3>
+                <h2><?php echo $event->titreEvenement ?></h2>
             </div>
         </div>
         <div class="cart">
@@ -98,74 +83,80 @@
     </div>
 </section><!--/#explore-->
 
-
+<?php $all = $db->getAllEvents(); ?>
 <section id="event">
     <div class="container">
-        <div class="row">
+        <?php
+        echo <<< END
+
+                <div class="row">
             <div class="col-sm-12 col-md-9">
                 <div id="event-carousel" class="carousel slide" data-interval="false">
-                    <h2 class="heading">THE ROCKING Performers</h2>
-                    <a class="even-control-left" href="#event-carousel" data-slide="prev"><i class="fa fa-angle-left"></i></a>
-                    <a class="even-control-right" href="#event-carousel" data-slide="next"><i class="fa fa-angle-right"></i></a>
+                    
+END;
+        foreach($all as $one) {
+            echo '
+                    <h2 class="heading">' . $one['titreEvenement'] . '</h2>
                     <div class="carousel-inner">
+
                         <div class="item active">
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="single-event">
-                                        <img class="img-responsive" src="images/event/event1.jpg" alt="event-image">
-                                        <h4>Chester Bennington</h4>
-                                        <h5>Vocal</h5>
+                                        <h4>' . $one['description'] . '</h4>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="single-event">
-                                        <img class="img-responsive" src="images/event/event2.jpg" alt="event-image">
-                                        <h4>Mike Shinoda</h4>
-                                        <h5>vocals, rhythm guitar</h5>
+                                        <h4>A : ' . $one['lieu'] . '</h4>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="single-event">
-                                        <img class="img-responsive" src="images/event/event3.jpg" alt="event-image">
-                                        <h4>Rob Bourdon</h4>
-                                        <h5>drums</h5>
+                                        <h4>Du :' . $one['dateDebut'] . '</h4>
                                     </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="single-event">
+                                        <h4>Au : ' . $one['dateFin'] . '</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="single-event">
+                                        <h4>Au : ' . $one['dateFin'] . '</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="single-event">
+                                        <h4>Nombre de places: ' . $one['nbPlaces'] . '</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="single-event">
+                                    <!--A MODIFIER QUAND ON A LES SESSIONS -->
+                                        <h4>Prix :' . $one['tarifBase'] . '€</h4>
+                                    </div>
+                                </div>
+                                 <div class="cart">
+                                    <a href="#"><i class="fa fa-shopping-cart"></i> <span>Reservez !</span></a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="item">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="single-event">
-                                        <img class="img-responsive" src="images/event/event1.jpg" alt="event-image">
-                                        <h4>Chester Bennington</h4>
-                                        <h5>Vocal</h5>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="single-event">
-                                        <img class="img-responsive" src="images/event/event2.jpg" alt="event-image">
-                                        <h4>Mike Shinoda</h4>
-                                        <h5>vocals, rhythm guitar</h5>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="single-event">
-                                        <img class="img-responsive" src="images/event/event3.jpg" alt="event-image">
-                                        <h4>Rob Bourdon</h4>
-                                        <h5>drums</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="guitar">
-                <img class="img-responsive" src="images/guitar.png" alt="guitar">
-            </div>
+                        </div>';
+        }
+
+        echo <<< END
         </div>
     </div>
+END;
+
+
+
+
+
+
+        ?>
+
+
 </section><!--/#event-->
 
 

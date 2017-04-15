@@ -28,8 +28,12 @@ class db {
     }
 
 
-    function test(){
-        return ORM::for_table('utilisateur')->find_one(1);
+
+    function getLatestEvent(){
+        return ORM::for_table('evenement')->find_one()->order_by_asc('dateDebut')->where('valide', 'true');
     }
 
+    function getAllEvents(){
+        return ORM::for_table('evenement')->findArray();
+    }
 }
