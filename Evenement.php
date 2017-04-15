@@ -1,3 +1,5 @@
+<?php require_once('db.php'); ?>
+<?php $db = new db(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
