@@ -36,4 +36,23 @@ class db {
     function getAllEvents(){
         return ORM::for_table('evenement')->findArray();
     }
+
+
+    function register($nom, $prenom, $dob, $adresse, $cp, $ville){
+        $id = ORM::for_table('utilisateur')->count();
+        $id++;
+
+        $person = ORM::for_table('utilisateur')->create();
+
+        $person->idUtilisateur = $id;
+        $person->nom = $nom;
+        $person->prenom = $prenom;
+        $person->datenaiss = $dob;
+        $person->adresse = $adresse;
+        $person->codePostal = $cp;
+        $person->ville = $ville;
+        //$person->dateinscr = '19/10/1995';
+        $person->idStatut = 2;
+        $person->save();
+    }
 }
