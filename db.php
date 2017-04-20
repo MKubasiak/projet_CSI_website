@@ -65,4 +65,44 @@ class db {
         ))->count('*');
         return $count;
     }
+
+    function getComments($id){
+        $test =    ORM::for_table('commente')->where('idEvenement', $id)->find_array();
+        return $test;
+    }
+
+    function getNameFromComment($id){
+        $user = ORM::for_table('utilisateur')->find_one($id);
+        return $user->prenom;
+    }
+
+    function getTarifForUser($mail, $idevent){
+        /*$count = ORM::for_table('utilisateur')->where(array(
+            'mail' => $mail,
+            'idstatut' => '3'
+        ))->count('*');*/
+        $count = ORM::for_table('utilisateur')->where(array(
+            'mail' => $mail,
+            'idStatut'  => '3'
+        ))->count('*');
+        if($count > 0){
+            $event = ORM::for_table('evenement')->find_one($idevent);
+            return $event['tarifMembre'];
+        }else{
+            $event = ORM::for_table('evenement')->find_one($idevent);
+            return $event['tarifBase'];
+        }
+    }
+
+    function createCommente($mail, $idevent,$comment){
+        $user = ORM::for_table('utilisateur')->where('mail', $mail)->find_one();
+        //return array($user['idUtilisateur'], $idevent, $comment);
+
+        $commente = ORM::for_table('commente')->create();
+        $commente->idUtilisateur = $user['idUtilisateur'];
+        $commente->idEvenement = $idevent;
+        $commente->texte = $comment;
+
+        $commente->save();
+    }
 }

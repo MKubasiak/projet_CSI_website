@@ -96,6 +96,7 @@
                     
 END;
         foreach($all as $one) {
+            $comments = $db->getComments($one['idEvenement']);
             echo '
                     <h2 class="heading">' . $one['titreEvenement'] . '</h2>
                     <div class="carousel-inner">
@@ -135,17 +136,46 @@ END;
                                 <div class="col-sm-4">
                                     <div class="single-event">
                                     <!--A MODIFIER QUAND ON A LES SESSIONS -->
-                                        <h4>Prix :' . $one['tarifBase'] . '€</h4>
+                                        <h4>Votre tarif : ';
+                                        if(isset($_SESSION['mail'])){
+                                            $tarif = $db->getTarifForUser($_SESSION['mail'], $one['idEvenement']);
+                                        }else{
+                                            $tarif = $one['tarifBase'];
+                                        }
+                                    echo $tarif .'€</h4>
                                     </div>
                                 </div>
                                  <div class="cart">
                                     <a href="#"><i class="fa fa-shopping-cart"></i> <span>Reservez !</span></a>
                                 </div>
                             </div>
-                        </div>';
+                            </div>
+                            <div class="col-sm-10">Commentaires :';
+            echo '<div class="row">';
+            foreach($comments as $comment){
+                $prenom = $db->getNameFromComment($comment['idUtilisateur']);
+                echo ' <div class="col-sm-10">
+                            <h4>-------------------------------------------------------------------------------</h4>
+                            <div class="single-event">
+                                <h4> De : ' . $prenom . '</h4>
+                            </div>
+                            <div class="single-event">
+                                <h4>' . $comment['texte'] . '</h4>
+                            </div>
+                            <h4>-------------------------------------------------------------------------------</h4>
+                       </div>';
+            }
+            echo '
+            <form method="post" action="Commente.php">
+                <input type="hidden" value="'.$one['idEvenement'] .'" name="idevent" id="idevent">
+                <input type="hidden" value="'.$_SESSION['mail'].'" name="mail" id="mail">
+                    <button type="submit" class="btn btn-primary">Commentez !</button>
+            </form>';
+            echo '</div>';
         }
 
         echo <<< END
+        </div>
         </div>
     </div>
 END;
