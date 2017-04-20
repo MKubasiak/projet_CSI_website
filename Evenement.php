@@ -1,5 +1,6 @@
 <?php require_once('db.php'); ?>
 <?php $db = new db(); ?>
+<?php session_start();?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

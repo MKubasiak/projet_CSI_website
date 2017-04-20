@@ -1,6 +1,5 @@
 <?php require_once('db.php'); ?>
 <?php $db = new db(); ?>
-<?php session_start();?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,25 +31,7 @@
 <li class="scroll"><a href="Bureau.php">Bureau</a></li>
 <li class="scroll"><a href="Connexion.php">Connexion</a></li>
 <li class="scroll"><a href="Inscription.php">Inscription</a></li>
-<form method="post" action="Inscription.php" >
-    <div class="form-group row">
-        <label for="example-text-input" class="col-2 col-form-label">Nom</label>
-        <div class="col-6">
-            <input class="form-control" type="text" value="Duchemin" id="nom" name="nom">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="example-text-input" class="col-2 col-form-label">Prenom</label>
-        <div class="col-6">
-            <input class="form-control" type="text" value="Phillipe" id="prenom" name="prenom">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="example-date-input" class="col-2 col-form-label">Date de naissance</label>
-        <div class="col-6">
-            <input class="form-control" type="date" value="2011-08-19" id="dob" name="dob">
-        </div>
-    </div>
+<form method="post" action="Connexion.php" >
     <div class="form-group row">
         <label for="example-text-input" class="col-2 col-form-label">Adresse E-mail</label>
         <div class="col-6">
@@ -63,32 +44,19 @@
             <input class="form-control" type="password"  id="pwd" name="pwd">
         </div>
     </div>
-    <div class="form-group row">
-        <label for="example-text-input" class="col-2 col-form-label">Adresse</label>
-        <div class="col-6">
-            <input class="form-control" type="text" value="55 Rue Faubourg Saint-Honoré" id="adresse" name="adresse">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="example-text-input" class="col-2 col-form-label">Code Postal</label>
-        <div class="col-6">
-            <input class="form-control" type="text" value="75008" id="cp" name="cp">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="example-text-input" class="col-2 col-form-label">Ville</label>
-        <div class="col-6">
-            <input class="form-control" type="text" value="Paris" id="ville" name="ville">
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary">S'inscrire</button>
+    <button type="submit" class="btn btn-primary">Se connecter</button>
 </form>
 
 
 <?php
-if(!is_null($_POST['nom'])){
-    $db->register($_POST['nom'],$_POST['prenom'],$_POST['dob'],$_POST['adresse'],$_POST['cp'],$_POST['ville'],$_POST['mail'],$_POST['pwd']);
-    echo 'vous avez bien été enregistré';
+if(!is_null($_POST['mail'])){
+   $count=$db->connect($_POST['mail'],$_POST['pwd']);
+    if($count == 1){
+        session_start();
+        $_SESSION['mail'] = $_POST['mail'];
+        $_SESSION['pwd'] = $_POST['pwd'];
+    }
+
 }
 
 

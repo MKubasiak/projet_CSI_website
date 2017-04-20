@@ -38,7 +38,7 @@ class db {
     }
 
 
-    function register($nom, $prenom, $dob, $adresse, $cp, $ville){
+    function register($nom, $prenom, $dob, $adresse, $cp, $ville, $mail, $pwd){
         $id = ORM::for_table('utilisateur')->count();
         $id++;
 
@@ -53,6 +53,16 @@ class db {
         $person->ville = $ville;
         //$person->dateinscr = '19/10/1995';
         $person->idStatut = 2;
+        $person->mail = $mail;
+        $person->mdp = $pwd;
         $person->save();
+    }
+
+    function connect($mail, $pwd){
+        $count = ORM::for_table('utilisateur')->where(array(
+            'mail' => $mail,
+            'mdp'  => $pwd
+        ))->count('*');
+        return $count;
     }
 }
