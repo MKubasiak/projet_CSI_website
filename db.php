@@ -77,10 +77,6 @@ class db {
     }
 
     function getTarifForUser($mail, $idevent){
-        /*$count = ORM::for_table('utilisateur')->where(array(
-            'mail' => $mail,
-            'idstatut' => '3'
-        ))->count('*');*/
         $count = ORM::for_table('utilisateur')->where(array(
             'mail' => $mail,
             'idStatut'  => '3'
@@ -105,5 +101,20 @@ class db {
         $commente->texte = $comment;
 
         $commente->save();
+    }
+
+    function getNbParticipants($id){
+        return ORM::for_table('participe')->where('idEvenement', $id)->count();
+    }
+
+    function addParticipe($idevent, $mail){
+        $user = ORM::for_table('utilisateur')->where('mail', $mail)->find_one();
+        $participe = ORM::for_table('participe')->create();
+
+        $participe->idUtilisateur = $user['idUtilisateur'];
+        $participe->idEvenement = $idevent;
+        $particip['paye'] = 'true';
+
+        $participe->save();
     }
 }
