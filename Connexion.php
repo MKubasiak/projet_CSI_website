@@ -55,6 +55,9 @@ if(!is_null($_POST['mail'])){
         session_start();
         $_SESSION['mail'] = $_POST['mail'];
         $_SESSION['pwd'] = $_POST['pwd'];
+        echo "vous êtes bien connecté";
+    }else{
+        echo "un  problème est survenu, merci de reessayer";
     }
 
 }

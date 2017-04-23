@@ -96,10 +96,11 @@ class db {
 
     function createCommente($mail, $idevent,$comment){
         $user = ORM::for_table('utilisateur')->where('mail', $mail)->find_one();
-        //return array($user['idUtilisateur'], $idevent, $comment);
+       // return array($user['idUtilisateur'], $idevent, $comment);
 
         $commente = ORM::for_table('commente')->create();
-        $commente->idUtilisateur = $user['idUtilisateur'];
+
+        $commente['idUtilisateur'] = $user['idUtilisateur'];
         $commente->idEvenement = $idevent;
         $commente->texte = $comment;
 

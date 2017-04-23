@@ -90,7 +90,6 @@
         <?php
         echo <<< END
 
-                <div class="row">
             <div class="col-sm-12 col-md-9">
                 <div id="event-carousel" class="carousel slide" data-interval="false">
                     
@@ -137,12 +136,12 @@ END;
                                     <div class="single-event">
                                     <!--A MODIFIER QUAND ON A LES SESSIONS -->
                                         <h4>Votre tarif : ';
-                                        if(isset($_SESSION['mail'])){
-                                            $tarif = $db->getTarifForUser($_SESSION['mail'], $one['idEvenement']);
-                                        }else{
-                                            $tarif = $one['tarifBase'];
-                                        }
-                                    echo $tarif .'€</h4>
+            if(isset($_SESSION['mail'])){
+                $tarif = $db->getTarifForUser($_SESSION['mail'], $one['idEvenement']);
+            }else{
+                $tarif = $one['tarifBase'];
+            }
+            echo $tarif .'€</h4>
                                     </div>
                                 </div>
                                  <div class="cart">
@@ -165,13 +164,16 @@ END;
                             <h4>-------------------------------------------------------------------------------</h4>
                        </div>';
             }
-            echo '
+            if(!is_null($_SESSION['mail'])){
+                echo '
             <form method="post" action="Commente.php">
-                <input type="hidden" value="'.$one['idEvenement'] .'" name="idevent" id="idevent">
-                <input type="hidden" value="'.$_SESSION['mail'].'" name="mail" id="mail">
+                <input type="hidden" value="' . $one['idEvenement'] . '" name="idevent" id="idevent">
+                <input type="hidden" value="' . $_SESSION['mail'] . '" name="mail" id="mail">
                     <button type="submit" class="btn btn-primary">Commentez !</button>
             </form>';
-            echo '</div>';
+                echo '</div>';
+            }
+
         }
 
         echo <<< END
