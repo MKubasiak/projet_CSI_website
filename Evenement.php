@@ -52,8 +52,15 @@
                         <li class="scroll"><a href="Evenement.php">Evenements</a></li>
                         <li class="scroll"><a href="About.php">A propos</a></li>
                         <li class="scroll"><a href="Bureau.php">Bureau</a></li>
-                        <li class="scroll"><a href="Connexion.php">Connexion</a></li>
-                        <li class="scroll"><a href="Inscription.php">Inscription</a></li>
+						<?php
+							if(!isset($_SESSION['mail']){
+								echo '<li class="scroll"><a href="Connexion.php">Connexion</a></li>
+                        <li class="scroll"><a href="Inscription.php">Inscription</a></li>'
+							}else{
+									echo '<li class="scroll"><a href="Adhesion.php">Adherer</a></li>'
+							}
+						?>
+                      
                     </ul>
                 </div>
             </div>
@@ -78,9 +85,6 @@
                 <h2><?php echo $event->titreEvenement ?></h2>
             </div>
         </div>
-        <div class="cart">
-            <a href="#"><i class="fa fa-shopping-cart"></i> <span>Purchase Tickets</span></a>
-        </div>
     </div>
 </section><!--/#explore-->
 
@@ -95,10 +99,10 @@
                     
 END;
         foreach($all as $one) {
-            $comments = $db->getComments($one['idEvenement']);
-            $nbPart = $db->getNbParticipants($one['idEvenement']);
+            $comments = $db->getComments($one['idevenement']);
+            $nbPart = $db->getNbParticipants($one['idevenement']);
             echo '
-                    <h2 class="heading">' . $one['titreEvenement'] . '</h2>
+                    <h2 class="heading">' . $one['titreevenement'] . '</h2>
                     <div class="carousel-inner">
 
                         <div class="item active">
@@ -115,22 +119,22 @@ END;
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="single-event">
-                                        <h4>Du :' . $one['dateDebut'] . '</h4>
+                                        <h4>Du :' . $one['datedebut'] . '</h4>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="single-event">
-                                        <h4>Au : ' . $one['dateFin'] . '</h4>
+                                        <h4>Au : ' . $one['datefin'] . '</h4>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="single-event">
-                                        <h4>Au : ' . $one['dateFin'] . '</h4>
+                                        <h4>Au : ' . $one['datefin'] . '</h4>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="single-event">
-                                        <h4>Nombre de places: ' . $one['nbPlaces'] . '</h4>
+                                        <h4>Nombre de places: ' . $one['nbplaces'] . '</h4>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
@@ -143,22 +147,19 @@ END;
                                     <!--A MODIFIER QUAND ON A LES SESSIONS -->
                                         <h4>Votre tarif : ';
             if(isset($_SESSION['mail'])){
-                $tarif = $db->getTarifForUser($_SESSION['mail'], $one['idEvenement']);
+                $tarif = $db->getTarifForUser($_SESSION['mail'], $one['idevenement']);
             }else{
-                $tarif = $one['tarifBase'];
+                $tarif = $one['tarifbase'];
             }
             echo $tarif .'€</h4>
                                     </div>
-                                </div>
-                                 <div class="cart">
-                                    <a href="#"><i class="fa fa-shopping-cart"></i> <span>Reservez !</span></a>
                                 </div>
                             </div>
                             </div>
                             <div class="col-sm-10">Commentaires :';
             echo '<div class="row">';
             foreach($comments as $comment){
-                $prenom = $db->getNameFromComment($comment['idUtilisateur']);
+                $prenom = $db->getNameFromComment($comment['idutilisateur']);
                 echo ' <div class="col-sm-10">
                             <h4>-------------------------------------------------------------------------------</h4>
                             <div class="single-event">
@@ -170,12 +171,12 @@ END;
                             <h4>-------------------------------------------------------------------------------</h4>
                        </div>';
             }
-            if(!is_null($_SESSION['mail'])){
+            if(isset($_SESSION['mail'])){
                 echo '
                <div class="col-sm-4">
                 <div class="single-event">
                     <form method="post" action="Commente.php">
-                        <input type="hidden" value="' . $one['idEvenement'] . '" name="idevent" id="idevent">
+                        <input type="hidden" value="' . $one['idevenement'] . '" name="idevent" id="idevent">
                         <input type="hidden" value="' . $_SESSION['mail'] . '" name="mail" id="mail">
                             <button type="submit" class="btn btn-primary">Commentez !</button>
                     </form>
@@ -184,7 +185,7 @@ END;
                <div class="col-sm-4">
                 <div class="single-event">
                     <form method="post" action="Evenement.php">
-                        <input type="hidden" value="' . $one['idEvenement'] . '" name="idevent" id="idevent">
+                        <input type="hidden" value="' . $one['idevenement'] . '" name="idevent" id="idevent">
                         <input type="hidden" value="participe" name="ptcp" id="ptcp">
                         <input type="hidden" value="' . $_SESSION['mail'] . '" name="mail" id="mail">
                             <button type="submit" class="btn btn-primary">Je participe</button>
@@ -194,7 +195,7 @@ END;
             ';
                 echo '</div>';
             }
-            if(!is_null($_POST['ptcp'])){
+            if(isset($_POST['ptcp']) && isset($_POST['mail'])){
                 $db->addParticipe($_POST['idevent'], $_POST['mail']);
                 echo "Vous avez indiqué participer à l'évènement, votre compte sera débité du tarif affiché";
             }

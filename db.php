@@ -11,26 +11,26 @@ class db {
     function __construct()
     {
         //Config PDO
-        ORM::configure('pgsql:host=localhost;port=5432;dbname=csi;user=postgres;password=');
+        ORM::configure('pgsql:host=localhost;port=5432;dbname=ProjetCSI;user=postgres;password=pmtlouor');
         ORM::configure('return_result_sets', true); // returns result sets
         ORM::configure('driver_options', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
 
         //override cles primaires
         ORM::configure('id_column_overrides', array(
-                'administre'    => array('idEvenement','idUtilisateur'),
-                'commente'      => array('idEvenement','idUtilisateur'),
-                'evenement'     => 'idEvenement',
-                'histBureau'    => 'idBureau',
-                'participe'     => array('idEvenement','idUtilisateur'),
-                'statut'        => 'idStatut',
-                'utilisateur'   => 'idUtilisateur'
+                'administre'    => array('idevenement','idutilisateur'),
+                'commente'      => array('idevenement','idutilisateur'),
+                'evenement'     => 'idevenement',
+                'histBureau'    => 'idbureau',
+                'participe'     => array('idevenement','idutilisateur'),
+                'statut'        => 'idstatut',
+                'utilisateur'   => 'idutilisateur'
         ));
     }
 
 
 
     function getLatestEvent(){
-        return ORM::for_table('evenement')->find_one()->order_by_asc('dateDebut')->where('valide', 'true');
+        return ORM::for_table('evenement')->find_one()->order_by_asc('datedebut')->where('valide', 'true');
     }
 
     function getAllEvents(){
@@ -44,15 +44,15 @@ class db {
 
         $person = ORM::for_table('utilisateur')->create();
 
-        $person->idUtilisateur = $id;
+        $person->idutilisateur = $id;
         $person->nom = $nom;
         $person->prenom = $prenom;
         $person->datenaiss = $dob;
         $person->adresse = $adresse;
-        $person->codePostal = $cp;
+        $person->codepostal = $cp;
         $person->ville = $ville;
         //$person->dateinscr = '19/10/1995';
-        $person->idStatut = 2;
+        $person->idstatut = 2;
         $person->mail = $mail;
         $person->mdp = $pwd;
         $person->save();
@@ -67,7 +67,7 @@ class db {
     }
 
     function getComments($id){
-        $test =    ORM::for_table('commente')->where('idEvenement', $id)->find_array();
+        $test =    ORM::for_table('commente')->where('idevenement', $id)->find_array();
         return $test;
     }
 
@@ -79,14 +79,14 @@ class db {
     function getTarifForUser($mail, $idevent){
         $count = ORM::for_table('utilisateur')->where(array(
             'mail' => $mail,
-            'idStatut'  => '3'
+            'idstatut'  => '3'
         ))->count('*');
         if($count > 0){
             $event = ORM::for_table('evenement')->find_one($idevent);
-            return $event['tarifMembre'];
+            return $event['tarifmembre'];
         }else{
             $event = ORM::for_table('evenement')->find_one($idevent);
-            return $event['tarifBase'];
+            return $event['tarifbase'];
         }
     }
 
@@ -96,23 +96,23 @@ class db {
 
         $commente = ORM::for_table('commente')->create();
 
-        $commente['idUtilisateur'] = $user['idUtilisateur'];
-        $commente->idEvenement = $idevent;
+        $commente['idutilisateur'] = $user['idutilisateur'];
+        $commente->idevenement = $idevent;
         $commente->texte = $comment;
 
         $commente->save();
     }
 
     function getNbParticipants($id){
-        return ORM::for_table('participe')->where('idEvenement', $id)->count();
+        return ORM::for_table('participe')->where('idevenement', $id)->count();
     }
 
     function addParticipe($idevent, $mail){
         $user = ORM::for_table('utilisateur')->where('mail', $mail)->find_one();
         $participe = ORM::for_table('participe')->create();
 
-        $participe->idUtilisateur = $user['idUtilisateur'];
-        $participe->idEvenement = $idevent;
+        $participe->idutilisateur = $user['idutilisateur'];
+        $participe->idevenement = $idevent;
         $particip['paye'] = 'true';
 
         $participe->save();

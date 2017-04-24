@@ -49,15 +49,15 @@
 
 
 <?php
-if(!is_null($_POST['mail'])){
+if(isset($_POST['mail'])){
    $count=$db->connect($_POST['mail'],$_POST['pwd']);
     if($count == 1){
         session_start();
         $_SESSION['mail'] = $_POST['mail'];
         $_SESSION['pwd'] = $_POST['pwd'];
-        echo "vous êtes bien connecté";
+        echo "Vous êtes bien connecté";
     }else{
-        echo "un  problème est survenu, merci de reessayer";
+        echo "Un  problème est survenu, merci de reessayer";
     }
 
 }

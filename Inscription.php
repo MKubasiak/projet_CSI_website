@@ -86,9 +86,9 @@
 
 
 <?php
-if(!is_null($_POST['nom'])){
+if(isset($_POST['nom'])){
     $db->register($_POST['nom'],$_POST['prenom'],$_POST['dob'],$_POST['adresse'],$_POST['cp'],$_POST['ville'],$_POST['mail'],$_POST['pwd']);
-    echo 'vous avez bien été enregistré';
+    echo 'Vous avez bien été enregistré';
 }
 
 

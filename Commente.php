@@ -46,7 +46,7 @@ session_start();?>
 
 
 <?php
-if(!is_null($_POST['submit'])){
+if(isset($_POST['submit'])){
    $db->createCommente($_POST['submit'], $_POST['idevent'], $_POST['comment']) ;
    // var_dump($test);
 }
