@@ -25,13 +25,19 @@ session_start();?>
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
 </head><!--/head-->
-
-<li class="scroll"><a href="Home.php">Accueil</a></li>
-<li class="scroll"><a href="Evenement.php">Evenements</a></li>
-<li class="scroll"><a href="About.php">A propos</a></li>
-<li class="scroll"><a href="Bureau.php">Bureau</a></li>
-<li class="scroll"><a href="Connexion.php">Connexion</a></li>
-<li class="scroll"><a href="Inscription.php">Inscription</a></li>
+     <li class="scroll active"><a href="Home.php">Accueil</a></li>
+                        <li class="scroll"><a href="Evenement.php">Evenements</a></li>
+                        <li class="scroll"><a href="About.php">A propos</a></li>
+                        <li class="scroll"><a href="Bureau.php">Bureau</a></li>
+						<?php
+							if(!isset($_SESSION['mail'])){
+								echo '<li class="scroll"><a href="Connexion.php">Connexion</a></li>
+                        <li class="scroll"><a href="Inscription.php">Inscription</a></li>';
+							}else{
+									echo '<li class="scroll"><a href="Adhesion.php">Adherer</a></li>';
+							}
+						?>
+                   
 <form method="post" action="Commente.php" >
     <input type="hidden" value="<?php echo $_POST['idevent']; ?>" name="idevent">
     <input type="hidden" value="<?php echo $_POST['mail'];?>" name="submit">

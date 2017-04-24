@@ -32,9 +32,15 @@ class db {
 	function updateUser($mail){
 		$user = ORM::for_table('utilisateur')->where('mail', $mail)->find_one();
         $user->datepaiement = date('Y-m-d');
-		$user->idstatut = 9;
 		$user->save();
 	}
+	
+	function getBureau(){
+			$id = ORM::for_table('histbureau')->count('*');
+			return ORM::for_table('histbureau')->where('idbureau', $id)->find_one();
+		
+	}
+	
     function getLatestEvent(){
         return ORM::for_table('evenement')->find_one()->order_by_asc('datedebut')->where('valide', 'true');
     }
