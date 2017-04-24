@@ -47,12 +47,19 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="scroll active"><a href="Home.php">Accueil</a></li>
+                             <li class="scroll active"><a href="Home.php">Accueil</a></li>
                         <li class="scroll"><a href="Evenement.php">Evenements</a></li>
                         <li class="scroll"><a href="About.php">A propos</a></li>
                         <li class="scroll"><a href="Bureau.php">Bureau</a></li>
-                        <li class="scroll"><a href="Connexion.php">Connexion</a></li>
-                        <li class="scroll"><a href="Inscription.php">Inscription</a></li>
+						<?php
+							if(!isset($_SESSION['mail'])){
+								echo '<li class="scroll"><a href="Connexion.php">Connexion</a></li>
+                        <li class="scroll"><a href="Inscription.php">Inscription</a></li>';
+							}else{
+									echo '<li class="scroll"><a href="Adhesion.php">Adherer</a></li>';
+							}
+						?>
+                   
                     </ul>
                 </div>
             </div>

@@ -60,6 +60,7 @@
 									echo '<li class="scroll"><a href="Adhesion.php">Adherer</a></li>';
 							}
 						?>
+                      
                     </ul>
                 </div>
             </div>
@@ -76,7 +77,7 @@
                 <img class="img-responsive" src="images/watch.png" alt="">
             </div>
             <div class="col-md-4 col-md-offset-2 col-sm-5">
-                <h2>Notre prochain évènement : </h2>
+                <h2>Notre prochain �v�nement : </h2>
             </div>
             <?php $event = $db->getLatestEvent();?>
             <div class="col-sm-7 col-md-6">
@@ -87,7 +88,7 @@
     </div>
 </section><!--/#explore-->
 
-<?php $all = $db->getAllEvents(); ?>
+<?php $all = $db->getBureau(); ?>
 <section id="event">
     <div class="container">
         <?php
@@ -98,8 +99,6 @@
                     
 END;
         foreach($all as $one) {
-            $comments = $db->getComments($one['idevenement']);
-            $nbPart = $db->getNbParticipants($one['idevenement']);
             echo '
                     <h2 class="heading">' . $one['titreevenement'] . '</h2>
                     <div class="carousel-inner">
@@ -111,98 +110,13 @@ END;
                                         <h4>' . $one['description'] . '</h4>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="single-event">
-                                        <h4>A : ' . $one['lieu'] . '</h4>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="single-event">
-                                        <h4>Du :' . $one['datedebut'] . '</h4>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="single-event">
-                                        <h4>Au : ' . $one['datefin'] . '</h4>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="single-event">
-                                        <h4>Au : ' . $one['datefin'] . '</h4>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="single-event">
-                                        <h4>Nombre de places: ' . $one['nbplaces'] . '</h4>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="single-event">
-                                        <h4>Nombre de participants: ' . $nbPart . '</h4>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="single-event">
-                                    <!--A MODIFIER QUAND ON A LES SESSIONS -->
-                                        <h4>Votre tarif : ';
-            if(isset($_SESSION['mail'])){
-                $tarif = $db->getTarifForUser($_SESSION['mail'], $one['idevenement']);
-            }else{
-                $tarif = $one['tarifbase'];
-            }
-            echo $tarif .'€</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                            <div class="col-sm-10">Commentaires :';
-            echo '<div class="row">';
-            foreach($comments as $comment){
-                $prenom = $db->getNameFromComment($comment['idutilisateur']);
-                echo ' <div class="col-sm-10">
-                            <h4>-------------------------------------------------------------------------------</h4>
-                            <div class="single-event">
-                                <h4> De : ' . $prenom . '</h4>
-                            </div>
-                            <div class="single-event">
-                                <h4>' . $comment['texte'] . '</h4>
-                            </div>
-                            <h4>-------------------------------------------------------------------------------</h4>
-                       </div>';
-            }
-            if(isset($_SESSION['mail'])){
-                echo '
-               <div class="col-sm-4">
-                <div class="single-event">
-                    <form method="post" action="Commente.php">
-                        <input type="hidden" value="' . $one['idevenement'] . '" name="idevent" id="idevent">
-                        <input type="hidden" value="' . $_SESSION['mail'] . '" name="mail" id="mail">
-                            <button type="submit" class="btn btn-primary">Commentez !</button>
-                    </form>
-                </div>
-               </div>
-               <div class="col-sm-4">
-                <div class="single-event">
-                    <form method="post" action="Evenement.php">
-                        <input type="hidden" value="' . $one['idevenement'] . '" name="idevent" id="idevent">
-                        <input type="hidden" value="participe" name="ptcp" id="ptcp">
-                        <input type="hidden" value="' . $_SESSION['mail'] . '" name="mail" id="mail">
-                            <button type="submit" class="btn btn-primary">Je participe</button>
-                    </form>
-                </div>
-              </div>
-            ';
-                echo '</div>';
-            }
-            if(isset($_POST['ptcp']) && isset($_POST['mail'])){
-                $db->addParticipe($_POST['idevent'], $_POST['mail']);
-                echo "Vous avez indiqué participer à l'évènement, votre compte sera débité du tarif affiché";
-            }
-
+							<div>
+						</div>
+					</div>
+       
         }
 
         echo <<< END
-        </div>
         </div>
     </div>
 END;
