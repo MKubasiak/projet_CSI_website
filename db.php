@@ -11,7 +11,7 @@ class db {
     function __construct()
     {
         //Config PDO
-        ORM::configure('pgsql:host=localhost;port=5432;dbname=ProjetCSI;user=postgres;password=pmtlouor');
+        ORM::configure('pgsql:host=localhost;port=5432;dbname=csi;user=postgres;password=');
         ORM::configure('return_result_sets', true); // returns result sets
         ORM::configure('driver_options', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
 
@@ -33,11 +33,26 @@ class db {
         return ORM::for_table('evenement')->find_one()->order_by_asc('datedebut')->where('valide', 'true');
     }
 
+    function getPendingEvent(){
+        return ORM::for_table('evenement')->where('valide', 'false')->findArray();
+    }
+
     function getAllEvents(){
         return ORM::for_table('evenement')->findArray();
     }
 
-
+    function valideEvent($id){
+        $event = ORM::for_table('evenement')->find_one()->where('idevenement', $id);
+        $event->set('valide', true);
+        $event->save();
+    }
+    
+    function cancelEvent($id){
+        var_dump($id);
+        ORM::for_table('administre')->find_one()->where('idevenement', $id)->delete();
+        ORM::for_table('evenement')->find_one()->where('idevenement', $id)->delete();
+    }
+    
     function register($nom, $prenom, $dob, $adresse, $cp, $ville, $mail, $pwd){
         $id = ORM::for_table('utilisateur')->count();
         $id++;
