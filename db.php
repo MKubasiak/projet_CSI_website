@@ -47,7 +47,8 @@ class db {
 	
 	function getBureau(){
 			$id = ORM::for_table('histbureau')->count('*');
-			return ORM::for_table('histbureau')->where('idbureau', $id)->find_one();
+            $bureau=    ORM::for_table('histbureau')->where('idbureau', $id)->find_one();
+        return array($bureau['id1'],$bureau['id2'],$bureau['id3'],$bureau['id4'],$bureau['id5'],$bureau['id6'],$bureau['id7']);
 	}
     
     function getAllStatut(){
@@ -56,6 +57,12 @@ class db {
     
     function getStatut($id){
         return ORM::for_table('statut')->where('idstatut', $id)->findArray()[0]["nomstatut"];
+    }
+
+    function canDeleteComment($idUser){
+        $statut = $this->getStatut($idUser);
+        $idCanDelete = array(1,2,3,4,5,6,7);
+        return in_array($statut, $idCanDelete);
     }
 	
     function getLatestEvent(){
@@ -145,6 +152,13 @@ class db {
     function getComments($id){
         $test =    ORM::for_table('commente')->where('idevenement', $id)->find_array();
         return $test;
+    }
+
+    function deleteComment($idEvent, $idUser){
+        ORM::for_table('commente')->where(array(
+            "idutilisateur" => $idUser,
+            "idevenement" => $idEvent
+        ))->delete_many();
     }
 
     function getNameFromComment($id){

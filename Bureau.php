@@ -2,7 +2,8 @@
 <?php $db = new db(); ?>
 <?php session_start();?>
 <!DOCTYPE html>
-<html lang="en">
+<!--suppress LossyEncoding -->
+    <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -77,12 +78,12 @@
                 <img class="img-responsive" src="images/watch.png" alt="">
             </div>
             <div class="col-md-4 col-md-offset-2 col-sm-5">
-                <h2>Notre prochain évènement : </h2>
+                <h2>Notre prochain EvÃ©nement : </h2>
             </div>
             <?php $event = $db->getLatestEvent();?>
             <div class="col-sm-7 col-md-6">
-                <h3><?php echo $event->dateDebut ?></h3>
-                <h2><?php echo $event->titreEvenement ?></h2>
+                <h3><?php echo $event->datedebut ?></h3>
+                <h2><?php echo $event->titreevenement ?></h2>
             </div>
         </div>
     </div>
@@ -99,20 +100,29 @@
                     
 END;
         foreach($all as $one) {
+            $user = $db->getUser($one);
+            $statut = $db->getStatut($user['idstatut']);
             echo '
                     <h2 class="heading">' . $one['titreevenement'] . '</h2>
                     <div class="carousel-inner">
 
                         <div class="item active">
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-sm-10">
                                     <div class="single-event">
-                                        <h4>' . $one['description'] . '</h4>
+                                        <h3>'.$statut.'</h3>
+                                        <h4>' . $user['nom'] .' '. $user['prenom']. '</h4>
+                                    </div>
+                                </div>
+							    <div class="col-sm-10">
+                                    <div class="single-event">
+                                        <h5>' . $user['adresse'] . '</h5>
+                                        <h5>' . $user['codepostal'] .' '. $user['ville']. '</h5>
                                     </div>
                                 </div>
 							<div>
 						</div>
-					</div>
+					</div>';
        
         }
 
