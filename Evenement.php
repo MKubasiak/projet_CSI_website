@@ -186,6 +186,7 @@ END;
                        </div>';
             }
             if(isset($_SESSION['mail'])){
+                if($one['fini']){
                 echo '
                <div class="col-sm-4">
                 <div class="single-event">
@@ -194,7 +195,9 @@ END;
                         <input type="hidden" value="' . $_SESSION['mail'] . '" name="mail" id="mail">
                             <button type="submit" class="btn btn-primary">Commentez !</button>
                     </form>
-                </div>
+                </div>';
+                }
+                echo '
                </div>
                <div class="col-sm-4">
                 <div class="single-event">
