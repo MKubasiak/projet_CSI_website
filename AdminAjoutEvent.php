@@ -2,13 +2,8 @@
 <?php $db = new db(); ?>
 <?php session_start();?>
 <?php
-if(isset($_POST['events'])) {
-    foreach($_POST['events'] as $event){
-        if (isset($_POST['Accepter']))
-            $db->valideEvent($event[0]);
-        else
-            $db->cancelEvent($event[0]);
-    }
+if (isset($_POST['Event'])) {
+    $db->addEvent($_GET['idevent'], $_POST['titreevenement'], $_POST['datedebut'], $_POST['datefin'], $_POST['nbplaces'], $_POST['tarifmembre'], $_POST['tarifbase'], $db->getUserId($_SESSION['mail']), $_POST['desc'], $_POST['lieu']);
 }
 ?>
 <!DOCTYPE html>
@@ -80,7 +75,13 @@ if(isset($_POST['events'])) {
                 <img class="img-responsive" src="images/watch.png" alt="">
             </div>
             <div class="col-md-4 col-md-offset-2 col-sm-5">
-                <h2>Pannel administration : </h2>
+                <?php 
+                if (isset($_POST['Event'])) {
+                    echo '<h2>Proposer un événement : Evenement enregistré</h2>';
+                } else {
+                    echo '<h2>Proposer un événement : </h2>';
+                }
+                ?>
             </div>
             <?php $event = $db->getLatestEvent();?>
             <div class="col-sm-7 col-md-6">
@@ -94,9 +95,6 @@ if(isset($_POST['events'])) {
     </div>
 </section><!--/#explore-->
 
-<?php 
-    $all = $db->getPendingEvent();
-?>
 <section id="event">
     <div class="container">
         <?php
@@ -107,22 +105,57 @@ if(isset($_POST['events'])) {
                 <div id="event-carousel" class="carousel slide" data-interval="false">
                     
 END;
-        echo '
-        <form method="get" action="AdminMembre.php">
-            <input type="submit" value="Administrer les membres"/>
-        </form>
-        <form method="get" action="AdminParticipation.php">
-            <input type="submit" value="Administrer les participations"/>
-        </form>
-        <form method="get" action="AdminAdhesion.php">
-            <input type="submit" value="Administrer les adhésions"/>
-        </form>
-        <form method="get" action="AdminAjoutEvent.php">
-            <input type="submit" value="Proposer un évenement"/>
-        </form>
-        <form action="AdminInscription.php">
-            <input type="submit" value="Administrer les inscriptions"/>
-        </form>';
+                    
+            echo '
+            <form method="post" action="AdminAjoutEvent.php?idevent=' . $db->getEventId() . '" >
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Nom de l\'evenement : <input type="text" name="titreevenement" value="Oral CSI" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Date de début : <input type="text" name="datedebut" value="2017-04-25" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Darte de fin : <input name="datefin" type="text" value="2017-04-26" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Nombre de places : <input name="nbplaces" type="text" value="6" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Tarif membre : <input name="tarifmembre" type="text" value="12" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Tarif de base : <input name="tarifbase" type="text" value="15" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Description : <input name="desc" type="text" value="Oral du projet de conception de système d\'information" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Lieu : <input name="lieu" type="text" value="NANCY" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" name="Event" value="Enregistrer" class="btn btn-primary"/>
+                </form>';
+                    
         echo <<< END
         </div>
         </div>

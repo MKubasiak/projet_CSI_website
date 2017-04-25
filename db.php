@@ -92,8 +92,34 @@ class db {
         return ORM::for_table('evenement')->findArray();
     }
     
+    function getEventId(){
+        return ORM::for_table('evenement')->max('idevenement') + 1;
+    }
+    
+    function addEvent($id, $titre, $datedebut, $datefin, $nbplaces, $tarifmembre, $tarifbase, $idorga, $desc, $lieu){
+        $event = ORM::for_table('evenement')->create();
+        $event->idevenement = $id;
+        $event->titreevenement = $titre;
+        $event->datedebut = $datedebut;
+        $event->datefin = $datefin;
+        $event->fini = 'false';
+        $event->nbplaces = $nbplaces;
+        $event->discute = 'false';
+        $event->valide = 'false';
+        $event->tarifmembre = $tarifmembre;
+        $event->tarifbase = $tarifbase;
+        $event->idorganisateur = $idorga;
+        $event->description = $desc;
+        $event->lieu = $lieu;
+        $event->save();
+    }
+    
+    function getUserId($mail){
+        return ORM::for_table('utilisateur')->where_like('mail', "$mail%")->findArray()[0]['idutilisateur'];
+    }
+    
     function isRoot($mail){
-        $id = ORM::for_table('utilisateur')->where_like('mail', "$mail%")->findArray()[0]['idutilisateur'];
+        $id = getUserId($mail);
         return !empty(ORM::for_table('histbureau')
             ->where_any_is(array(
                 array('id1' => $id),
