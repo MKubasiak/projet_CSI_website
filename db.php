@@ -27,7 +27,17 @@ class db {
         ));
     }
 
-
+    function updateUserInformations($id, $nom, $prenom, $datenaiss, $adresse, $codepostal, $ville, $idstatut){
+        $user = ORM::for_table('utilisateur')->where('idutilisateur', $id)->find_one();
+        $user->nom = $nom;
+        $user->prenom = $prenom;
+        $user->datenaiss = $datenaiss;
+        $user->adresse = $adresse;
+        $user->codepostal = $codepostal;
+        $user->ville = $ville;
+        $user->idstatut = $idstatut;
+        $user->save();
+    }
 
 	function updateUser($mail){
 		$user = ORM::for_table('utilisateur')->where('mail', $mail)->find_one();
@@ -38,8 +48,15 @@ class db {
 	function getBureau(){
 			$id = ORM::for_table('histbureau')->count('*');
 			return ORM::for_table('histbureau')->where('idbureau', $id)->find_one();
-		
 	}
+    
+    function getAllStatut(){
+        return ORM::for_table('statut')->findArray();
+    }
+    
+    function getStatut($id){
+        return ORM::for_table('statut')->where('idstatut', $id)->findArray()[0]["nomstatut"];
+    }
 	
     function getLatestEvent(){
         return ORM::for_table('evenement')->find_one()->order_by_asc('datedebut')->where('valide', 'true');
@@ -47,6 +64,14 @@ class db {
 
     function getPendingEvent(){
         return ORM::for_table('evenement')->where('valide', 'false')->findArray();
+    }
+    
+    function getAllMembers(){
+        return ORM::for_table('utilisateur')->order_by_asc('idutilisateur')->findArray();
+    }
+    
+    function getUser($id){
+        return ORM::for_table('utilisateur')->where('idutilisateur', $id)->findArray()[0];
     }
 
     function getAllEvents(){

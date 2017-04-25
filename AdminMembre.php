@@ -2,15 +2,9 @@
 <?php $db = new db(); ?>
 <?php session_start();?>
 <?php
-if(isset($_POST['events'])) {
-    foreach($_POST['events'] as $event){
-        var_dump($_POST['events']);
-        var_dump($event);
-        if (isset($_POST['Accepter']))
-            $db->valideEvent($event);
-        else
-            $db->cancelEvent($event);
-    }
+var_dump($_POST);
+if (isset($_POST['Modify'])) {
+    $db->updateUserInformations($_GET['EditMembre'], $_POST['nom'], $_POST['prenom'], $_POST['datenaiss'], $_POST['adresse'], $_POST['codepostal'], $_POST['ville'], $_POST['idstatut']);
 }
 ?>
 <!DOCTYPE html>
@@ -96,9 +90,6 @@ if(isset($_POST['events'])) {
     </div>
 </section><!--/#explore-->
 
-<?php 
-    $all = $db->getPendingEvent();
-?>
 <section id="event">
     <div class="container">
         <?php
@@ -109,55 +100,101 @@ if(isset($_POST['events'])) {
                 <div id="event-carousel" class="carousel slide" data-interval="false">
                     
 END;
-        echo '                    <form method="post" action="Admin.php" >';
-        foreach($all as $one) {
-            $nbPart = $db->getNbParticipants($one['idevenement']);
-            echo '
-                        <h2 class="heading">' . $one['titreevenement'] . '</h2>
-                        <input class="boxii" type="checkbox" name="events[]" value="' . $one['idevenement'] . '" /></span>
+        // Modification d'un membre
+        if(isset($_GET['EditMembre'])) {    
+            $one = $db->getUser($_GET['EditMembre']);
+            $combobox = '';
+            foreach($db->getAllStatut() as $statut){
+                if (strcmp($statut['idstatut'],$one['idstatut']) == 0)
+                    $default = 'selected';
+                else
+                    $default = '';
+                $combobox .= '<option value="'.$statut['idstatut'].'" '. $default.'>'.$statut['nomstatut'].'</option>';
+            }
+            echo '<h2 class="heading">' . $one['prenom'] . ' ' . $one['nom'] . '</h2>
+            <form method="post" action="AdminMembre.php?EditMembre=' . $one['idutilisateur'] . '" >
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Prenom : <input type="text" name="prenom" value="'.$one['prenom'].'" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Nom : <input type="text" name="nom" value="'.$one['nom'].'" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Date de naissance : <input name="datenaiss" type="text" value='.$one['datenaiss'].' />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Code Postal : <input name="codepostal" type="text" value='.$one['codepostal'].' />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Adresse : <input name="adresse" type="text" value="'.$one['adresse'].'"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                Ville : <input name="ville" type="text" value="'.$one['ville'].'"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="single-event">
+                                <select name="idstatut">'.
+                                $combobox
+                                .'</select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" name="Modify" value="Enregistrer" class="btn btn-primary"/>
+                </form>';
+        } else {
+            // Liste des membres modifiables
+            $all = $db->getAllMembers();
+            foreach($all as $one) {
+                echo '
+                        <h2 class="heading">' . $one['prenom'] . ' ' . $one['nom'] . '</h2>
+                        <form method="post" action="AdminMembre.php?EditMembre=' . $one['idutilisateur'] . '" >
                         <div class="carousel-inner">
                             <div class="item active">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="single-event">
-                                            <h4>' . $one['description'] . '</h4>
+                                            <h4>' . $one['datenaiss'] . '</h4>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="single-event">
-                                            <h4>A : ' . $one['lieu'] . '</h4>
+                                            <h4>Résidence : '. $one['codepostal'] . ' ' . $one['ville'] . ' ' . $one['adresse'] . '</h4>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="single-event">
-                                            <h4>Du :' . $one['datedebut'] . '</h4>
+                                            <h4>Statut : ' . $db->getStatut($one['idstatut']) . '</h4>
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="single-event">
-                                            <h4>Au : ' . $one['datefin'] . '</h4>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="single-event">
-                                            <h4>Au : ' . $one['datefin'] . '</h4>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="single-event">
-                                            <h4>Nombre de places: ' . $one['nbplaces'] . '</h4>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="single-event">
-                                            <h4>Nombre de participants: ' . $nbPart . '</h4>
+                                            <h4>Mail : ' . $one['mail'] . '</h4>
                                         </div>
                                     </div>
                                 </div>
-                            </div>';
+                            </div>
+                        </div>
+                        <input  type="submit" class="btn btn-primary" value="Modifier"/>
+                        </form>';
+            }
         }
-        echo '<button name="Accepter" type="submit" class="btn btn-primary"> Accepter </button>
-        <button name="Refuser" type="submit" class="btn btn-primary"> Refuser </button>';
+
 
         echo <<< END
         </div>
