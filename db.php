@@ -58,6 +58,12 @@ class db {
     function getStatut($id){
         return ORM::for_table('statut')->where('idstatut', $id)->findArray()[0]["nomstatut"];
     }
+
+    function canDeleteComment($idUser){
+        $statut = $this->getStatut($idUser);
+        $idCanDelete = array(1,2,3,4,5,6,7);
+        return in_array($statut, $idCanDelete);
+    }
 	
     function getLatestEvent(){
         return ORM::for_table('evenement')->find_one()->order_by_asc('datedebut')->where('valide', 'true');
@@ -123,6 +129,13 @@ class db {
     function getComments($id){
         $test =    ORM::for_table('commente')->where('idevenement', $id)->find_array();
         return $test;
+    }
+
+    function deleteComment($idEvent, $idUser){
+        ORM::for_table('commente')->where(array(
+            "idutilisateur" => $idUser,
+            "idevenement" => $idEvent
+        ))->delete_many();
     }
 
     function getNameFromComment($id){

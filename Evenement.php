@@ -159,15 +159,30 @@ END;
             echo '<div class="row">';
             foreach($comments as $comment){
                 $prenom = $db->getNameFromComment($comment['idutilisateur']);
+                $statutCanDeleteComment = $db->canDeleteComment($comment['idutilisateur']);
+                $userComment = $db->getUser($comment['idutilisateur']);
                 echo ' <div class="col-sm-10">
-                            <h4>-------------------------------------------------------------------------------</h4>
+                            <h4>---------   ----------------------------------------------------------------------</h4>
                             <div class="single-event">
                                 <h4> De : ' . $prenom . '</h4>
                             </div>
                             <div class="single-event">
                                 <h4>' . $comment['texte'] . '</h4>
-                            </div>
-                            <h4>-------------------------------------------------------------------------------</h4>
+                            </div>';
+                            
+                if(preg_replace('/\s+/', '', $_SESSION['mail'] )==preg_replace('/\s+/', '',  $userComment['mail']) || $statutCanDeleteComment ){
+                    echo '               <div class="col-sm-4">
+                    <div class="single-event">
+                        <form method="post" action="Evenement.php">
+                            <input type="hidden" value="' . $one['idevenement'] . '" name="idevent" id="idevent">
+                            <input type="hidden" value="delete" name="delete" id="delete">
+                            <input type="hidden" value="' . $comment['idutilisateur'] . '" name="iduser" id="iduser">
+                                <button type="submit" class="btn btn-primary">Supprimer ce commentaire</button>
+                        </form>
+                    </div>
+                  </div>';
+                }
+                    echo'<h4>-------------------------------------------------------------------------------</h4>
                        </div>';
             }
             if(isset($_SESSION['mail'])){
@@ -190,13 +205,15 @@ END;
                             <button type="submit" class="btn btn-primary">Je participe</button>
                     </form>
                 </div>
-              </div>
-            ';
+              </div>';
                 echo '</div>';
             }
             if(isset($_POST['ptcp']) && isset($_POST['mail'])){
                 $db->addParticipe($_POST['idevent'], $_POST['mail']);
                 echo "Vous avez indiqué participer à l'évènement, votre compte sera débité du tarif affiché";
+            }
+            if(isset($_POST['delete']) && isset($_POST['idevent']) && isset($_POST['iduser'])){
+                $db->deleteComment($_POST['idevent'], $_POST['iduser']);
             }
 
         }
