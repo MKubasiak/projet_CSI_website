@@ -61,6 +61,7 @@ if(isset($_POST['mail'])){
         session_start();
         $_SESSION['mail'] = $_POST['mail'];
         $_SESSION['pwd'] = $_POST['pwd'];
+        $_SESSION['root'] = $db->isRoot($_POST['mail']);
         echo "Vous êtes bien connecté";
     }else{
         echo "Un  problème est survenu, merci de reessayer";

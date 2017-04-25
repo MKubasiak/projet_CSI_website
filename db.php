@@ -3,7 +3,6 @@
 
 require_once 'idiorm-master/idiorm.php';
 
-
 class db {
 
 
@@ -91,6 +90,20 @@ class db {
 
     function getAllEvents(){
         return ORM::for_table('evenement')->findArray();
+    }
+    
+    function isRoot($mail){
+        $id = ORM::for_table('utilisateur')->where_like('mail', "$mail%")->findArray()[0]['idutilisateur'];
+        return !empty(ORM::for_table('histbureau')
+            ->where_any_is(array(
+                array('id1' => $id),
+                array('id2' => $id),
+                array('id3' => $id),
+                array('id4' => $id),
+                array('id5' => $id),
+                array('id6' => $id),
+                array('id7' => $id)))
+            ->findArray());
     }
     
     function acceptAd($id){

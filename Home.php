@@ -1,4 +1,6 @@
-<?php session_start();?>
+<?php 
+//session_destroy(); 
+session_start();?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,6 +60,9 @@
 							}else{
 									echo '<li class="scroll"><a href="Adhesion.php">Adherer</a></li>';
 							}
+                            if(isset($_SESSION['root']) && $_SESSION['root']){
+                                echo '<li class="scroll"><a href="Admin.php">Administrer</a></li>';
+                            }
 						?>
                    
                     </ul>
