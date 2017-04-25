@@ -1,5 +1,5 @@
 <?php 
-//session_destroy(); 
+//session_destroy();
 session_start();?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,7 +51,6 @@ session_start();?>
                     <ul class="nav navbar-nav navbar-right">
                              <li class="scroll active"><a href="Home.php">Accueil</a></li>
                         <li class="scroll"><a href="Evenement.php">Evenements</a></li>
-                        <li class="scroll"><a href="About.php">A propos</a></li>
                         <li class="scroll"><a href="Bureau.php">Bureau</a></li>
 						<?php
 							if(!isset($_SESSION['mail'])){
