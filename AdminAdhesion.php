@@ -4,7 +4,8 @@
 <!DOCTYPE html>
 <?php
 // Passer idstatut à 9 et donner current time dans datedelabdeadh
-$db->acceptAd($_GET['id']);
+if (isset($_GET['id']))
+    $db->acceptAd($_GET['id']);
 ?>
 <html lang="en">
 <head>
