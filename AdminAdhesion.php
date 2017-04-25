@@ -1,12 +1,11 @@
 <?php require_once('db.php'); ?>
 <?php $db = new db(); ?>
 <?php session_start();?>
-<?php
-if (isset($_POST['Modify'])) {
-    $db->updateUserInformations($_GET['EditMembre'], $_POST['nom'], $_POST['prenom'], $_POST['datenaiss'], $_POST['adresse'], $_POST['codepostal'], $_POST['ville'], $_POST['idstatut']);
-}
-?>
 <!DOCTYPE html>
+<?php
+// Passer idstatut à 9 et donner current time dans datedelabdeadh
+$db->acceptAd($_GET['id']);
+?>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -75,7 +74,7 @@ if (isset($_POST['Modify'])) {
                 <img class="img-responsive" src="images/watch.png" alt="">
             </div>
             <div class="col-md-4 col-md-offset-2 col-sm-5">
-                <h2>Membre inscrits : </h2>
+                <h2>Demandes d'adhésion en attente de validation : </h2>
             </div>
             <?php $event = $db->getLatestEvent();?>
             <div class="col-sm-7 col-md-6">
@@ -99,100 +98,22 @@ if (isset($_POST['Modify'])) {
                 <div id="event-carousel" class="carousel slide" data-interval="false">
                     
 END;
-        // Modification d'un membre
-        if(isset($_GET['EditMembre'])) {    
-            $one = $db->getUser($_GET['EditMembre']);
-            $combobox = '';
-            foreach($db->getAllStatut() as $statut){
-                if (strcmp($statut['idstatut'],$one['idstatut']) == 0)
-                    $default = 'selected';
-                else
-                    $default = '';
-                $combobox .= '<option value="'.$statut['idstatut'].'" '. $default.'>'.$statut['nomstatut'].'</option>';
-            }
-            echo '<h2 class="heading">' . $one['prenom'] . ' ' . $one['nom'] . '</h2>
-            <form method="post" action="AdminMembre.php?EditMembre=' . $one['idutilisateur'] . '" >
-            <div class="carousel-inner">
-                <div class="item active">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="single-event">
-                                Prenom : <input type="text" name="prenom" value="'.$one['prenom'].'" />
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="single-event">
-                                Nom : <input type="text" name="nom" value="'.$one['nom'].'" />
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="single-event">
-                                Date de naissance : <input name="datenaiss" type="text" value='.$one['datenaiss'].' />
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="single-event">
-                                Code Postal : <input name="codepostal" type="text" value='.$one['codepostal'].' />
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="single-event">
-                                Adresse : <input name="adresse" type="text" value="'.$one['adresse'].'"/>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="single-event">
-                                Ville : <input name="ville" type="text" value="'.$one['ville'].'"/>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="single-event">
-                                <select name="idstatut">'.
-                                $combobox
-                                .'</select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <input type="submit" name="Modify" value="Enregistrer" class="btn btn-primary"/>
-                </form>';
-        } else {
-            // Liste des membres modifiables
-            $all = $db->getAllMembers();
+            $all = $db->getPendingAd();
             foreach($all as $one) {
                 echo '
-                        <h2 class="heading">' . $one['prenom'] . ' ' . $one['nom'] . '</h2>
-                        <form method="post" action="AdminMembre.php?EditMembre=' . $one['idutilisateur'] . '" >
-                        <div class="carousel-inner">
-                            <div class="item active">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="single-event">
-                                            <h4>' . $one['datenaiss'] . '</h4>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="single-event">
-                                            <h4>Résidence : '. $one['codepostal'] . ' ' . $one['ville'] . ' ' . $one['adresse'] . '</h4>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="single-event">
-                                            <h4>Statut : ' . $db->getStatut($one['idstatut']) . '</h4>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="single-event">
-                                            <h4>Mail : ' . $one['mail'] . '</h4>
-                                        </div>
+                        <form method="post" action="AdminAdhesion.php?id='.$one['idutilisateur'].'" >
+                        <div class="row">
+                            <div class="carousel-inner">
+                                <div class="col-sm-4">
+                                    <div class="single-event">
+                                        <h4>' . $one['nom'] . ' ' . $one['prenom'] . ' à demandé à adhérer le : '. $one['datepaiement'].'</h4>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <input  type="submit" class="btn btn-primary" value="Modifier"/>
+                        <input value="Accepter" type="submit" class="btn btn-primary"/>
                         </form>';
             }
-        }
 
 
         echo <<< END

@@ -11,7 +11,7 @@ class db {
     function __construct()
     {
         //Config PDO
-        ORM::configure('pgsql:host=localhost;port=5432;dbname=ProjetCSI;user=postgres;password=pmtlouor');
+        ORM::configure('pgsql:host=localhost;port=5432;dbname=csi;user=postgres;password=');
         ORM::configure('return_result_sets', true); // returns result sets
         ORM::configure('driver_options', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
 
@@ -70,12 +70,35 @@ class db {
         return ORM::for_table('utilisateur')->order_by_asc('idutilisateur')->findArray();
     }
     
+    function getAllMembersDate(){
+        return ORM::for_table('utilisateur')->order_by_desc('dateinscr')->findArray();
+    }
+    
+    function getEvent($id){
+        return ORM::for_table('evenement')->where('idevenement', $id)->findArray()[0];
+    }
+    
     function getUser($id){
         return ORM::for_table('utilisateur')->where('idutilisateur', $id)->findArray()[0];
     }
 
     function getAllEvents(){
         return ORM::for_table('evenement')->findArray();
+    }
+    
+    function acceptAd($id){
+        $user = ORM::for_table('utilisateur')->where('idutilisateur', $id)->find_one();
+        $user->idstatut = 9;
+        $user->datedelabdeadh = date('Y-m-d');
+        $user->save();
+    }
+    
+    function getPendingAd(){
+        return ORM::for_table('utilisateur')->where('idstatut', 8)->where_not_null('datepaiement')->findArray();
+    }
+    
+    function getAllParticipations(){
+        return ORM::for_table('participe')->where('paye', 'true')->findArray();
     }
 
     function valideEvent($id){
