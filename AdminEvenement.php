@@ -4,12 +4,10 @@
 <?php
 if(isset($_POST['events'])) {
     foreach($_POST['events'] as $event){
-        var_dump($_POST['events']);
-        var_dump($event);
         if (isset($_POST['Accepter']))
-            $db->valideEvent($event);
+            $db->valideEvent($event[0]);
         else
-            $db->cancelEvent($event);
+            $db->cancelEvent($event[0]);
     }
 }
 ?>
@@ -109,7 +107,7 @@ if(isset($_POST['events'])) {
                 <div id="event-carousel" class="carousel slide" data-interval="false">
                     
 END;
-        echo '                    <form method="post" action="Admin.php" >';
+        echo '<form method="post" action="Admin.php" >';
         foreach($all as $one) {
             $nbPart = $db->getNbParticipants($one['idevenement']);
             echo '
