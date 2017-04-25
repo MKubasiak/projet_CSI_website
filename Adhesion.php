@@ -32,6 +32,18 @@ session_start();?>
 <li class="scroll"><a href="Bureau.php">Bureau</a></li>
 <li class="scroll"><a href="Connexion.php">Connexion</a></li>
 <li class="scroll"><a href="Inscription.php">Inscription</a></li>
+<?php
+if(!isset($_SESSION['mail'])){
+    echo '<li class="scroll"><a href="Connexion.php">Connexion</a></li>
+                        <li class="scroll"><a href="Inscription.php">Inscription</a></li>';
+}else{
+    echo '<li class="scroll"><a href="Adhesion.php">Adherer</a></li>';
+}
+if(isset($_SESSION['root']) && $_SESSION['root']){
+    echo '<li class="scroll"><a href="Admin.php">Administrer</a></li>';
+}
+?>
+
 <form method="post" action="Adhesion.php" >
     <input type="hidden" value="<?php echo $_SESSION['mail'];?>" name="submit">
     <button type="submit" class="btn btn-primary">Adherer (paiement)</button>
