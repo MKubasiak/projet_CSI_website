@@ -47,7 +47,8 @@ class db {
 	
 	function getBureau(){
 			$id = ORM::for_table('histbureau')->count('*');
-			return ORM::for_table('histbureau')->where('idbureau', $id)->find_one();
+            $bureau=    ORM::for_table('histbureau')->where('idbureau', $id)->find_one();
+        return array($bureau['id1'],$bureau['id2'],$bureau['id3'],$bureau['id4'],$bureau['id5'],$bureau['id6'],$bureau['id7']);
 	}
     
     function getAllStatut(){

@@ -80,8 +80,8 @@
             </div>
             <?php $event = $db->getLatestEvent();?>
             <div class="col-sm-7 col-md-6">
-                <h3><?php echo $event->dateDebut ?></h3>
-                <h2><?php echo $event->titreEvenement ?></h2>
+                <h3><?php echo $event->datedebut ?></h3>
+                <h2><?php echo $event->titreevenement ?></h2>
             </div>
         </div>
     </div>
