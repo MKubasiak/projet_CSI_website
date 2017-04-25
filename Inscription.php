@@ -29,15 +29,18 @@
                         <li class="scroll"><a href="Evenement.php">Evenements</a></li>
                         <li class="scroll"><a href="About.php">A propos</a></li>
                         <li class="scroll"><a href="Bureau.php">Bureau</a></li>
-						<?php
-							if(!isset($_SESSION['mail'])){
-								echo '<li class="scroll"><a href="Connexion.php">Connexion</a></li>
+<?php
+if(!isset($_SESSION['mail'])){
+    echo '<li class="scroll"><a href="Connexion.php">Connexion</a></li>
                         <li class="scroll"><a href="Inscription.php">Inscription</a></li>';
-							}else{
-									echo '<li class="scroll"><a href="Adhesion.php">Adherer</a></li>';
-							}
-						?>
-                   
+}else{
+    echo '<li class="scroll"><a href="Adhesion.php">Adherer</a></li>';
+}
+if(isset($_SESSION['root']) && $_SESSION['root']){
+    echo '<li class="scroll"><a href="Admin.php">Administrer</a></li>';
+}
+?>
+
 <form method="post" action="Inscription.php" >
     <div class="form-group row">
         <label for="example-text-input" class="col-2 col-form-label">Nom</label>

@@ -54,6 +54,18 @@
                         <li class="scroll"><a href="Bureau.php">Bureau</a></li>
                         <li class="scroll"><a href="Connexion.php">Connexion</a></li>
                         <li class="scroll"><a href="Inscription.php">Inscription</a></li>
+                        <?php
+                        if(!isset($_SESSION['mail'])){
+                            echo '<li class="scroll"><a href="Connexion.php">Connexion</a></li>
+                        <li class="scroll"><a href="Inscription.php">Inscription</a></li>';
+                        }else{
+                            echo '<li class="scroll"><a href="Adhesion.php">Adherer</a></li>';
+                        }
+                        if(isset($_SESSION['root']) && $_SESSION['root']){
+                            echo '<li class="scroll"><a href="Admin.php">Administrer</a></li>';
+                        }
+                        ?>
+
                     </ul>
                 </div>
             </div>
